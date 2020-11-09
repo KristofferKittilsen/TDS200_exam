@@ -1,0 +1,7 @@
+{
+  "name": "TDS200_h20_10054",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react"
+}
