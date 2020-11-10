@@ -1,8 +1,14 @@
 import React from 'react';
-import { Redirect, Route } from 'react-router-dom';
+import { Redirect, Route, Switch } from 'react-router-dom';
 import { IonApp, IonRouterOutlet } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import Home from './pages/Home';
+import FrontPage from './pages/FrontPage';
+import Login from './pages/Login';
+import Signup from './pages/Signup';
+import ProfilePage from './pages/ProfilePage';
+import { NhostApolloProvider } from 'react-nhost';
+import configData from "./config.json";
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -23,15 +29,21 @@ import '@ionic/react/css/display.css';
 /* Theme variables */
 import './theme/variables.css';
 
+
 const App: React.FC = () => (
-  <IonApp>
-    <IonReactRouter>
-      <IonRouterOutlet>
-        <Route path="/home" component={Home} exact={true} />
-        <Route exact path="/" render={() => <Redirect to="/home" />} />
-      </IonRouterOutlet>
-    </IonReactRouter>
-  </IonApp>
+  <NhostApolloProvider gqlEndpoint={configData.ENDPOINT}>
+    <IonApp>
+      <IonReactRouter>
+        <Switch>
+          <Route path="/frontpage" component={FrontPage} exact={true} />
+          <Route path="/home" component={Home} exact={true} />
+          <Route path="/login" component={Login} exact={true} />
+          <Route path="/signup" component={Signup} exact={true} />
+          <Route path="/profile" component={ProfilePage} exact={true} />
+        </Switch>
+      </IonReactRouter>
+    </IonApp>
+  </NhostApolloProvider>
 );
 
 export default App;
