@@ -4,7 +4,9 @@
   "private": true,
   "dependencies": {
     "@apollo/client": "^3.2.5",
+    "@capacitor-community/react-hooks": "0.0.11",
     "@capacitor/core": "2.4.2",
+    "@ionic/pwa-elements": "^3.0.1",
     "@ionic/react": "^5.0.7",
     "@ionic/react-router": "^5.0.7",
     "@testing-library/jest-dom": "^4.2.4",
@@ -20,6 +22,7 @@
     "graphql": "^15.4.0",
     "graphql-tag": "^2.11.0",
     "ionicons": "^5.0.0",
+    "nhost-js-sdk": "^2.3.1",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
     "react-nhost": "^2.0.2",

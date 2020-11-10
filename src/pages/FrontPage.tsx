@@ -1,16 +1,27 @@
 import { IonButton, IonButtons, IonContent, IonInput, IonItem, IonPage} from '@ionic/react';
 import React from 'react';
+import { useHistory } from 'react-router';
 import styled from 'styled-components';
 
 const FrontPage = () => {
+
+    let history = useHistory();
+    const replaceFrontPageWithLogin = () => {
+        history.replace("/login")
+    }
+
+    const replaceFrontPageWithSignUp = () => {
+        history.replace("/signup")
+    }
+
     return (
         <IonPage>
             <IonContentBackground>
                 <CenteredContainer>
                     <PageTitle>Ut på tur</PageTitle>
                     <PageSubtitle>Vi hjelper deg å komme deg ut av døra</PageSubtitle>
-                    <FrontPageLoginBtn routerLink="/login">Log in</FrontPageLoginBtn>
-                    <FrontPageSignUpBtn routerLink="/signup">Sign up</FrontPageSignUpBtn>
+                    <FrontPageLoginBtn onClick={replaceFrontPageWithLogin}>Log in</FrontPageLoginBtn>
+                    <FrontPageSignUpBtn onClick={replaceFrontPageWithSignUp}>Sign up</FrontPageSignUpBtn>
                 </CenteredContainer>
             </IonContentBackground>
         </IonPage>

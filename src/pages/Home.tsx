@@ -1,10 +1,13 @@
 import { useQuery } from '@apollo/client';
-import { IonContent, IonHeader, IonLabel, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { IonAvatar, IonButton, IonButtons, IonCol, IonContent, IonFab, IonFabButton, IonFabList, IonGrid, IonHeader, IonIcon, IonLabel, IonPage, IonPopover, IonRow, IonThumbnail, IonTitle, IonToolbar } from '@ionic/react';
 import gql from 'graphql-tag';
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useHistory } from 'react-router-dom';
 import IPostList from "../models/IPostList"
 import PostInfoCard from "../components/PostInfoCard";
+import { walkOutline, addCircleOutline, personOutline, addOutline, homeOutline } from "ionicons/icons";
+import styled from 'styled-components';
+import NavigationFabs from '../components/NavigationFabs';
 
 const GET_POSTS = gql`
 query {
@@ -16,6 +19,8 @@ query {
     trip_area
     trip_difficulty
     user_id
+    image_filename
+    trip_description
     user {
       display_name
     }
@@ -27,6 +32,8 @@ query {
 const Home = () => {
   
   const {loading, data} = useQuery<IPostList>(GET_POSTS);
+  let history = useHistory();
+  const [show, setShow] = useState<any>();
 
   if (loading) {
     return <IonLabel>Loading...</IonLabel>
@@ -44,6 +51,7 @@ const Home = () => {
         {
           data?.posts.map(post => (
             <Link style={{textDecoration: "none"}} key={post.id} to={{
+              pathname: `/tripDetails/${post.id}`,
               state: {
                 post
               }
@@ -52,6 +60,7 @@ const Home = () => {
             </Link>
           ))
         }
+        <NavigationFabs />
       </IonContent>
     </IonPage>
   );

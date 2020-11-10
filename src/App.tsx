@@ -7,8 +7,11 @@ import FrontPage from './pages/FrontPage';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import ProfilePage from './pages/ProfilePage';
-import { NhostApolloProvider } from 'react-nhost';
+import { NhostApolloProvider, NhostAuthProvider } from 'react-nhost';
 import configData from "./config.json";
+import { auth } from './utils/nhost';
+import NewTrip from './pages/NewTrip';
+import TripDetailPage from './pages/TripDetailPage';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -31,19 +34,24 @@ import './theme/variables.css';
 
 
 const App: React.FC = () => (
-  <NhostApolloProvider gqlEndpoint={configData.ENDPOINT}>
-    <IonApp>
-      <IonReactRouter>
-        <Switch>
-          <Route path="/frontpage" component={FrontPage} exact={true} />
-          <Route path="/home" component={Home} exact={true} />
-          <Route path="/login" component={Login} exact={true} />
-          <Route path="/signup" component={Signup} exact={true} />
-          <Route path="/profile" component={ProfilePage} exact={true} />
-        </Switch>
-      </IonReactRouter>
-    </IonApp>
-  </NhostApolloProvider>
+  <NhostAuthProvider auth={auth}>
+    <NhostApolloProvider auth={auth} gqlEndpoint={configData.ENDPOINT}>
+      <IonApp>
+        <IonReactRouter>
+          <Switch>
+            <Route path="/" component={FrontPage} exact={true} />
+            <Route path="/home" component={Home} exact={true} />
+            <Route path="/login" component={Login} exact={true} />
+            <Route path="/signup" component={Signup} exact={true} />
+            <Route path="/profile" component={ProfilePage} exact={true} />
+            <Route path="/newTrip" component={NewTrip} exact={true} />
+            <Route path="/tripDetails/:id" component={TripDetailPage} exact={true} />
+          </Switch>
+        </IonReactRouter>
+      </IonApp>
+    </NhostApolloProvider>
+  </NhostAuthProvider>
+
 );
 
 export default App;
