@@ -1,11 +1,11 @@
 import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCol, IonGrid, IonIcon, IonRow } from "@ionic/react";
+import { fitnessOutline, mapOutline, walkOutline } from "ionicons/icons";
 import React from "react";
-import IPost from "../models/IPost";
 import styled from 'styled-components';
-import { walkOutline, fitnessOutline, mapOutline } from "ionicons/icons";
 import configData from "../config.json";
+import ITrip from "../models/ITrip";
 
-const PostInfoCard = ({id, how_long, rating, trip_area, trip_difficulty, trip_type, user, image_filename, trip_description}: IPost) => {
+const PostInfoCard = ({id, how_long, rating, trip_area, trip_difficulty, trip_type, user, image_filename, trip_description}: ITrip) => {
 
     return (
         <IonCard>

@@ -1,9 +1,10 @@
-import { IonFab, IonFabButton, IonIcon, IonFabList } from "@ionic/react";
-import { addCircleOutline, addOutline, walkOutline, personOutline, homeOutline } from "ionicons/icons";
+import { IonFab, IonFabButton, IonFabList, IonIcon } from "@ionic/react";
+import { addCircleOutline, addOutline, homeOutline, personOutline } from "ionicons/icons";
 import React from "react";
 import styled from 'styled-components';
 
 const NavigationFabs = () => {
+
     return (
         <IonFab vertical="bottom" horizontal="end" slot="fixed">
           <IonFabButton>
@@ -11,13 +12,10 @@ const NavigationFabs = () => {
           </IonFabButton>
           <IonFabList side="top">
             <IonFabButtonStyled routerLink="/newTrip">
-                <IonIcon icon={addOutline} />
-            </IonFabButtonStyled>
-            <IonFabButtonStyled routerLink="/profile">
-                <IonIcon icon={personOutline} />
+                <IonIconStyled icon={addOutline} />
             </IonFabButtonStyled>
             <IonFabButtonStyled routerLink="/home">
-                <IonIcon icon={homeOutline} />
+                <IonIconStyled icon={homeOutline} />
             </IonFabButtonStyled>
           </IonFabList>
         </IonFab>
@@ -26,6 +24,10 @@ const NavigationFabs = () => {
 
 const IonFabButtonStyled = styled(IonFabButton)`
   --background: #3880ff;
+`;
+
+const IonIconStyled = styled(IonIcon)`
+  color: #ffff;
 `;
 
 export default NavigationFabs;

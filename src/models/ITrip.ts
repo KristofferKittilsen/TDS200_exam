@@ -1,6 +1,5 @@
 
-
-interface IPost {
+interface ITrip {
     id: number;
     trip_type: string;
     how_long: number;
@@ -9,9 +8,13 @@ interface IPost {
     trip_difficulty: string;
     image_filename: string;
     trip_description: string;
+    longitude: number;
+    latitude: number;
     user: {
+        id: string;
         display_name: string;
+        avatar_url: string;
     }
 }
 
-export default IPost;
+export default ITrip;

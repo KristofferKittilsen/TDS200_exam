@@ -1,4 +1,4 @@
-import { IonButton, IonCol, IonContent, IonGrid, IonIcon, IonInput, IonItem, IonPage, IonRow, useIonViewWillEnter } from "@ionic/react";
+import { IonButton, IonCol, IonContent, IonGrid, IonIcon, IonInput, IonItem, IonPage, IonRow, IonSpinner, useIonViewWillEnter } from "@ionic/react";
 import React, { useState } from "react";
 import WaveBackground from "../components/WaveBackground";
 import { renderToStaticMarkup } from "react-dom/server";
@@ -15,20 +15,23 @@ const Login = () => {
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [emailOrPasswordError, setEmailOrPasswordError] = useState<string>("");
+    const [isAuthenticating, setIsAuthenticating] = useState<boolean>(false);
 
     useIonViewWillEnter(() => {
         if (auth.isAuthenticated()) {
-            console.log("YES")
             history.replace("/home");
         }
     });
 
     const authUser = async () => {
+        setIsAuthenticating(true)
         try {
             await auth.login(email, password);
             history.replace("/home");
+            setIsAuthenticating(false)
         } catch (e) {
             setEmailOrPasswordError("Wrong email or password")
+            setIsAuthenticating(false)
             console.error(e);
         }
     }
@@ -67,7 +70,11 @@ const Login = () => {
                     </IonRow>
                     <IonRow>
                         <IonCol>
-                            <IonButtonStyled onClick={authUser}>Log in</IonButtonStyled>
+                            {
+                                isAuthenticating ? 
+                                    <IonButtonStyled><IonSpinner name="crescent" /></IonButtonStyled> :
+                                    <IonButtonStyled onClick={authUser}>Log in</IonButtonStyled>
+                            }
                         </IonCol>
                     </IonRow>
                     <IonRow>
