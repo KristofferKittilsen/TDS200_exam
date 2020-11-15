@@ -1,4 +1,4 @@
-import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCol, IonGrid, IonIcon, IonRow } from "@ionic/react";
+import { IonButton, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCol, IonGrid, IonIcon, IonLabel, IonRow } from "@ionic/react";
 import { fitnessOutline, mapOutline, walkOutline } from "ionicons/icons";
 import React from "react";
 import { Link } from "react-router-dom";
@@ -7,6 +7,23 @@ import configData from "../config.json";
 import ITrip from "../models/ITrip";
 
 const TripDetailCard = ({how_long, trip_description, id, image_filename, rating, trip_area, trip_difficulty, trip_type, user, latitude, longitude}: ITrip) => {
+
+    const checkCoords = () => {
+        if (longitude || latitude != null) {
+            return (
+                <Link to={{
+                    pathname: "/map",
+                    state: {
+                        latitude,
+                        longitude
+                    }
+                }}>
+                    <p><IonIcon icon={mapOutline}/>Show startpoint</p>
+                </Link>
+            )
+        }
+    }
+
     return (
         <IonCard>
             <IonCardHeader>
@@ -20,10 +37,9 @@ const TripDetailCard = ({how_long, trip_description, id, image_filename, rating,
                     <br></br>
                     <Link style={{textDecoration: "none"}}
                      to={{
-                         pathname: `/home`,
+                         pathname: `/profile/${id}`,
                          state: {
-                             displayName: user.display_name,
-                             userId: user.id
+                             user: user
                          }
                      }}>{user.display_name}</Link>
                 </IonCardSubtitle>
@@ -61,7 +77,7 @@ const TripDetailCard = ({how_long, trip_description, id, image_filename, rating,
                     </IonRow>
                     <IonRow>
                         <IonColWithoutPaddingLeft>
-                            <p><IonIcon icon={mapOutline}/>Starting Lat and Lon: {latitude}, {longitude}</p>
+                            {checkCoords()}
                         </IonColWithoutPaddingLeft>
                     </IonRow>
                 </IonGrid>

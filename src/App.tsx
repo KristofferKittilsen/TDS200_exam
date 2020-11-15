@@ -28,6 +28,7 @@ import TripDetailPage from './pages/TripDetailPage';
 import './theme/variables.css';
 import { auth } from './utils/nhost';
 import PrivateRoute from './components/PrivateRoute';
+import MapPage from './pages/MapPage';
 
 const App: React.FC = () => (
   <NhostAuthProvider auth={auth}>
@@ -39,6 +40,7 @@ const App: React.FC = () => (
             <Route path="/home" component={Home} exact={true} />
             <Route path="/login" component={Login} exact={true} />
             <Route path="/signup" component={Signup} exact={true} />
+            <PrivateRoute path="/map" component={MapPage} exact={true} />
             <Route path="/profile/:id" component={ProfilePage} exact={true} />
             <PrivateRoute path="/newTrip" component={NewTrip} exact={true} />
             <Route path="/tripdetails/:id" component={TripDetailPage} exact={true} />

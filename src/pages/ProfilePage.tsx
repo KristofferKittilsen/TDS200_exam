@@ -1,14 +1,15 @@
 import { useSubscription } from "@apollo/client";
-import { IonBackButton, IonButton, IonButtons, IonCard, IonCardTitle, IonCol, IonContent, IonGrid, IonHeader, IonPage, IonRow, IonSpinner, IonTitle, IonToolbar } from "@ionic/react";
+import { IonAvatar, IonBackButton, IonButton, IonButtons, IonCard, IonCardTitle, IonCol, IonContent, IonGrid, IonHeader, IonItem, IonPage, IonRow, IonSpinner, IonTitle, IonToolbar } from "@ionic/react";
 import gql from "graphql-tag";
 import React from "react";
 import styled from 'styled-components';
 import ProfileCard from "../components/ProfileCard";
 import ITripList from "../models/ITripList";
+import configData from "../config.json";
 
 const GET_TRIPS_BY_ID = gql`
 subscription ($userId: uuid = "") {
-    posts(where: {user: {id: {_eq: $userId}}}) {
+    trips(where: {user: {id: {_eq: $userId}}}) {
       id
       image_filename
       trip_area
@@ -22,12 +23,11 @@ subscription ($userId: uuid = "") {
 
 const ProfilePage = (props: any) => {
 
-    const userId: any = props.location?.state?.userId;
-    const displayName: any = props.location?.state?.displayName;
+    const user: any = props.location?.state?.user;
 
     const {loading, data} = useSubscription<ITripList>(
         GET_TRIPS_BY_ID, 
-        {variables: {userId: userId}}
+        {variables: {userId: user.id}}
     );
 
     if (loading) {
@@ -50,11 +50,23 @@ const ProfilePage = (props: any) => {
                         <IonCol>
                             <IonCardWithoutMarginTop>
                                 <IonRow>
-                                    <IonCol>
-                                        <IonCardTitleStyled>Email: {displayName}</IonCardTitleStyled>
+                                    <IonItem className="ion-no-padding">
+                                        <IonCol size="3">
+                                            <IonAvatar>
+                                                <img src={`${configData.IMAGE_ENDPOINT}${user.avatar_url}`}/>
+                                            </IonAvatar>
+                                        </IonCol>
+                                        <IonCol>
+                                            <IonCardTitleStyled>Email: {user.display_name}</IonCardTitleStyled>
+                                        </IonCol>
+                                    </IonItem>
+                                </IonRow>
+                                <IonRow>
+                                    <IonCol size="2">
+                                        <ChatButton>Chat</ChatButton>
                                     </IonCol>
                                     <IonCol>
-                                        <ChatButton>Chat</ChatButton>
+                                        <ChatButton>Follow</ChatButton>
                                     </IonCol>
                                 </IonRow>
                             </IonCardWithoutMarginTop>
@@ -100,7 +112,6 @@ const IonCardTitleStyled = styled(IonCardTitle)`
 
 const ChatButton = styled(IonButton)`
     font-size: 0.7em;
-    margin-left: 5%;
 `;
 
 export default ProfilePage; 

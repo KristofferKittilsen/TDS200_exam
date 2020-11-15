@@ -94,13 +94,20 @@ const NewTrip = () => {
     }
 
     const getGeoLocation = async () => {
-        if (checked) {
+        if (checked == true) {
             const coordinates = await Geolocation.getCurrentPosition();
-            console.log("Current", coordinates)
-            setLatitude(coordinates.coords.latitude)
-            setLongitude(coordinates.coords.longitude)
-            console.log(latitude, longitude)
-        } 
+            if (coordinates.coords.latitude || coordinates.coords.longitude == undefined || null) {
+                console.log("Current", coordinates)
+                setLatitude(coordinates.coords.latitude)
+                setLongitude(coordinates.coords.longitude)
+                console.log(latitude, longitude)
+            }
+        }
+
+        if (checked == false) {
+            setLatitude(undefined);
+            setLongitude(undefined);
+        }
     }
 
     const insertTrip = async () => {
@@ -144,7 +151,7 @@ const NewTrip = () => {
                     <IonGrid>
                         <IonRow>
                             <IonCol>
-                                <IonItemStyled>
+                                <IonItemStyled className="ion-no-padding">
                                     <IonLabel>Area</IonLabel>
                                     <IonInput onIonInput={(e: any) => setTripArea(e.target.value)} />
                                 </IonItemStyled>
@@ -152,7 +159,7 @@ const NewTrip = () => {
                         </IonRow>
                         <IonRow>
                             <IonCol>
-                                <IonItemStyled>
+                                <IonItemStyled className="ion-no-padding">
                                     <IonLabel>Type</IonLabel>
                                     <IonSelect onIonChange={(e: any) => setTripType(e.target.value)}>
                                         <IonSelectOption value="Walking">Walking</IonSelectOption>
@@ -164,7 +171,7 @@ const NewTrip = () => {
                         </IonRow>
                         <IonRow>
                             <IonCol>
-                                <IonItemStyled>
+                                <IonItemStyled className="ion-no-padding">
                                     <IonLabel>Length in KM</IonLabel>
                                     <IonInput type="number" placeholder="Length in KM" onIonInput={(e: any) => setHowLong(e.target.value)} />
                                 </IonItemStyled>  
@@ -172,7 +179,7 @@ const NewTrip = () => {
                         </IonRow>
                         <IonRow>
                             <IonCol>
-                                <IonItemStyled>
+                                <IonItemStyled className="ion-no-padding">
                                     <IonLabel>Difficulty</IonLabel>
                                     <IonSelect onIonChange={(e: any) => setTripDifficulty(e.target.value)}>
                                         <IonSelectOption value="very_easy">Very easy</IonSelectOption>
@@ -186,7 +193,7 @@ const NewTrip = () => {
                         </IonRow>
                         <IonRow>
                             <IonCol>
-                                <IonItemStyled>
+                                <IonItemStyled className="ion-no-padding">
                                     <IonLabel>Rating</IonLabel>
                                     <IonLabel>{rating}</IonLabel>
                                     <IonRange onIonChange={e => setRating(e.detail.value)} min={0} max={5} snaps={true} ticks={false}/>
@@ -195,7 +202,7 @@ const NewTrip = () => {
                         </IonRow>
                         <IonRow>
                             <IonCol>
-                                <IonItemStyled>
+                                <IonItemStyled className="ion-no-padding">
                                     <IonLabel>Description</IonLabel>
                                     <IonInput placeholder="Description" onIonInput={(e: any) => settripDescription(e.target.value)} />
                                 </IonItemStyled>
@@ -203,10 +210,10 @@ const NewTrip = () => {
                         </IonRow>
                         <IonRow>
                             <IonCol>
-                                <IonItem>
-                                    <IonLabel>Use your location location?</IonLabel>
+                                <IonItemStyled className="ion-no-padding">
+                                    <IonLabel>Use your current location?</IonLabel>
                                     <IonCheckbox checked={checked} onClick={getGeoLocation} onIonChange={e => setChecked(e.detail.checked)} />
-                                </IonItem>
+                                </IonItemStyled>
                             </IonCol>
                         </IonRow>
                         <IonRow>

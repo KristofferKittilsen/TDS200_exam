@@ -13,7 +13,7 @@ const PrivateRoute = ({component, path, exact}: PrivateRouteProps) => {
 
     return signedIn ? 
         <Route path={path} component={component} exact={exact} /> :
-        <Redirect to="/login" />
+        <Redirect to="/home" />
 }
 
 export default PrivateRoute;
