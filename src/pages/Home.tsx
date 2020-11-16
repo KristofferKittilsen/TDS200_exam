@@ -1,5 +1,6 @@
 import { useSubscription } from '@apollo/client';
-import { IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonPage, IonRefresher, IonRefresherContent, IonSpinner, IonTitle, IonToolbar } from '@ionic/react';
+import { RefresherEventDetail } from '@ionic/core';
+import { IonAvatar, IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonPage, IonRefresher, IonRefresherContent, IonSpinner, IonTitle, IonToolbar } from '@ionic/react';
 import gql from 'graphql-tag';
 import { exitOutline } from "ionicons/icons";
 import React from 'react';
@@ -9,7 +10,7 @@ import NavigationFabs from '../components/NavigationFabs';
 import PostInfoCard from "../components/PostInfoCard";
 import IPostList from "../models/ITripList";
 import { auth } from '../utils/nhost';
-import { RefresherEventDetail } from '@ionic/core';
+import configData from "../config.json";
 
 const GET_TRIPS = gql`
 subscription {
@@ -28,6 +29,12 @@ subscription {
       id
       display_name
       avatar_url
+      followers {
+        id
+        user_following {
+            display_name
+        }
+      }
     }
   }
 }
@@ -58,6 +65,8 @@ const Home = () => {
     }, 2000);
   }
 
+
+
   return (
     <IonPage>
       <IonHeader>
@@ -67,6 +76,22 @@ const Home = () => {
               <IonIconTurned icon={exitOutline}/>
             </IonButton>
           </IonButtons>
+          {
+            data?.trips.map((user, i) => (
+              i === 0 ?
+              <Link key={`link-${i}`} slot="end" to={{
+                pathname: `/profile/${auth.getClaim("x-hasura-user-id")}`,
+                state: {
+                  user: user.user
+                }
+              }}>
+                <IonAvatar>
+                  <img src={`${configData.IMAGE_ENDPOINT}${user.image_filename}`}/>
+                </IonAvatar>
+              </Link> :
+              <div key={`nothing-${i}`}></div>
+              ))
+          }
           <IonTitle>Ut på tur</IonTitle>
         </IonToolbar>
       </IonHeader>

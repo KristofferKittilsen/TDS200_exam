@@ -14,6 +14,13 @@ interface ITrip {
         id: string;
         display_name: string;
         avatar_url: string;
+        followers: {
+            id: number;
+            user_following: {
+              id: number;
+              display_name: string;
+            }
+          }
     }
 }
 

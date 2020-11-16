@@ -41,7 +41,7 @@ const TripDetailCard = ({how_long, trip_description, id, image_filename, rating,
                          state: {
                              user: user
                          }
-                     }}>{user.display_name}</Link>
+                        }}>{user.display_name}</Link>
                 </IonCardSubtitle>
                 <IonGrid>
                     <IonRow>

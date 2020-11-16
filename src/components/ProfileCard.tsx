@@ -1,5 +1,5 @@
-import { IonCard, IonCardContent, IonCardTitle, IonLabel } from "@ionic/react";
-import React from "react";
+import { IonButton, IonCard, IonCardContent, IonCardTitle, IonLabel } from "@ionic/react";
+import React, { useState } from "react";
 import configData from "../config.json";
 import ITrip from "../models/ITrip";
 import styled from 'styled-components';

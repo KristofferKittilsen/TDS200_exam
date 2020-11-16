@@ -1,11 +1,13 @@
-import { useSubscription } from "@apollo/client";
-import { IonAvatar, IonBackButton, IonButton, IonButtons, IonCard, IonCardTitle, IonCol, IonContent, IonGrid, IonHeader, IonItem, IonPage, IonRow, IonSpinner, IonTitle, IonToolbar } from "@ionic/react";
+import { useMutation, useSubscription } from "@apollo/client";
+import { IonAvatar, IonBackButton, IonButton, IonButtons, IonCard, IonCardTitle, IonCol, IonContent, IonGrid, IonHeader, IonItem, IonLabel, IonPage, IonRow, IonSpinner, IonTitle, IonToolbar } from "@ionic/react";
 import gql from "graphql-tag";
 import React from "react";
 import styled from 'styled-components';
 import ProfileCard from "../components/ProfileCard";
-import ITripList from "../models/ITripList";
 import configData from "../config.json";
+import ITripList from "../models/ITripList";
+import { auth } from "../utils/nhost";
+
 
 const GET_TRIPS_BY_ID = gql`
 subscription ($userId: uuid = "") {
@@ -21,6 +23,15 @@ subscription ($userId: uuid = "") {
   }
 `
 
+const INSERT_FOLLOWER = gql`
+mutation InsertFollower($follower: followers_insert_input!){
+    insert_followers_one(object: $follower) {
+      user_following_id
+      user_followers_id
+    }
+  }
+`;
+
 const ProfilePage = (props: any) => {
 
     const user: any = props.location?.state?.user;
@@ -30,8 +41,25 @@ const ProfilePage = (props: any) => {
         {variables: {userId: user.id}}
     );
 
+    const [insertFollowerMutation] = useMutation(INSERT_FOLLOWER);
+
     if (loading) {
         return <IonSpinner name="crescent" />
+    }
+
+    const insertFollower = async () => {
+        try {
+            await insertFollowerMutation ({
+                variables: {
+                    follower: {
+                        user_followers_id: user.id,
+                        user_following_id: auth.getClaim('x-hasura-user-id')
+                    }
+                }
+            })
+        } catch (e) {
+            console.error(e)
+        }
     }
 
     return (
@@ -58,15 +86,17 @@ const ProfilePage = (props: any) => {
                                         </IonCol>
                                         <IonCol>
                                             <IonCardTitleStyled>Email: {user.display_name}</IonCardTitleStyled>
+                                            <IonLabel>Followers: {user.followers.length}</IonLabel>
                                         </IonCol>
                                     </IonItem>
                                 </IonRow>
                                 <IonRow>
-                                    <IonCol size="2">
-                                        <ChatButton>Chat</ChatButton>
-                                    </IonCol>
                                     <IonCol>
-                                        <ChatButton>Follow</ChatButton>
+                                        {
+                                            user.id !== auth.getClaim("x-hasura-user-id") ?
+                                            <ChatButton onClick={insertFollower}>Follow</ChatButton> :
+                                            <ChatButton disabled>Follow</ChatButton>
+                                        }
                                     </IonCol>
                                 </IonRow>
                             </IonCardWithoutMarginTop>
@@ -113,5 +143,6 @@ const IonCardTitleStyled = styled(IonCardTitle)`
 const ChatButton = styled(IonButton)`
     font-size: 0.7em;
 `;
+
 
 export default ProfilePage; 
