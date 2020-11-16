@@ -1,6 +1,5 @@
-import { useSubscription } from '@apollo/client';
-import { RefresherEventDetail } from '@ionic/core';
-import { IonAvatar, IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonPage, IonRefresher, IonRefresherContent, IonSpinner, IonTitle, IonToolbar } from '@ionic/react';
+import { useQuery, useSubscription } from '@apollo/client';
+import { IonAvatar, IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonLabel, IonPage, IonSpinner, IonTitle, IonToolbar } from '@ionic/react';
 import gql from 'graphql-tag';
 import { exitOutline } from "ionicons/icons";
 import React from 'react';
@@ -8,9 +7,9 @@ import { Link, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import NavigationFabs from '../components/NavigationFabs';
 import PostInfoCard from "../components/PostInfoCard";
-import IPostList from "../models/ITripList";
-import { auth } from '../utils/nhost';
 import configData from "../config.json";
+import ITripList from "../models/ITripList";
+import { auth } from '../utils/nhost';
 
 const GET_TRIPS = gql`
 subscription {
@@ -34,16 +33,18 @@ subscription {
         user_following {
             display_name
         }
+        user_followers {
+          display_name
+        }
       }
     }
   }
 }
-
 `;
 
 const Home = () => {
   
-  const {loading, data} = useSubscription<IPostList>(GET_TRIPS);
+  const {loading, data} = useSubscription<ITripList>(GET_TRIPS);
   let history = useHistory();
 
   if (loading) {
@@ -59,14 +60,6 @@ const Home = () => {
     }
   }
 
-  const doRefresh = (e: CustomEvent<RefresherEventDetail>) => {
-    setTimeout(() => {
-      e.detail.complete();
-    }, 2000);
-  }
-
-
-
   return (
     <IonPage>
       <IonHeader>
@@ -76,29 +69,20 @@ const Home = () => {
               <IonIconTurned icon={exitOutline}/>
             </IonButton>
           </IonButtons>
-          {
-            data?.trips.map((user, i) => (
-              i === 0 ?
-              <Link key={`link-${i}`} slot="end" to={{
-                pathname: `/profile/${auth.getClaim("x-hasura-user-id")}`,
-                state: {
-                  user: user.user
-                }
-              }}>
-                <IonAvatar>
-                  <img src={`${configData.IMAGE_ENDPOINT}${user.image_filename}`}/>
-                </IonAvatar>
-              </Link> :
-              <div key={`nothing-${i}`}></div>
-              ))
-          }
+          
+          <Link slot="end" style={{textDecoration: "none"}} to={{
+            pathname: `/profile/${auth.getClaim("x-hasura-user-id")}`,
+            state: {
+              userProfileId: auth.getClaim("x-hasura-user-id")
+            }
+          }}>
+            <IonLabel>Profile</IonLabel>
+          </Link>
+          
           <IonTitle>Ut på tur</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-        <IonRefresher slot="fixed" onIonRefresh={doRefresh}>
-          <IonRefresherContent pullingText="Pull to refresh"></IonRefresherContent>
-        </IonRefresher>
         {
           data?.trips.map(trip => (
             <Link style={{textDecoration: "none"}} key={trip.id} to={{

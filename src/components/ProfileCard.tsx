@@ -1,20 +1,29 @@
-import { IonButton, IonCard, IonCardContent, IonCardTitle, IonLabel } from "@ionic/react";
+import { IonCard, IonCardContent, IonCardTitle, IonLabel } from "@ionic/react";
 import React, { useState } from "react";
-import configData from "../config.json";
-import ITrip from "../models/ITrip";
 import styled from 'styled-components';
+import configData from "../config.json";
+import IUser from "../models/IUser";
 
-const ProfileCard = ({image_filename, trip_area, id, user}: ITrip) => {
+const ProfileCard = ({posts}: IUser) => {
+
+    const [post, setPost] = useState<any>(posts);
     
     return (
-        <IonCard>
-            <IonCardTitle>
-                <img src={`${configData.IMAGE_ENDPOINT}${image_filename}`} />
-            </IonCardTitle>
-            <IonCardContentStyled>
-                <IonLabelStyled>Area: {trip_area}</IonLabelStyled>
-            </IonCardContentStyled>
-        </IonCard>
+        <>
+            {
+                post.map((p: any, i: any) => (
+                    <IonCard key={`up-${i}`}>
+                        <IonCardTitle>
+                            <img src={`${configData.IMAGE_ENDPOINT}${p.image_filename}`} />
+                        </IonCardTitle>
+                        <IonCardContentStyled>
+                            <IonLabelStyled>Area: {p.trip_area}</IonLabelStyled>
+                        </IonCardContentStyled>
+                    </IonCard>
+                ))
+            }
+            
+        </>
     )
 }
 

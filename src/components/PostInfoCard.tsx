@@ -26,15 +26,15 @@ const PostInfoCard = ({id, how_long, rating, trip_area, trip_difficulty, trip_ty
                         </IonRow>
                         <IonRow>
                             <IonColWithoutPaddingLeft>
-                                <p><IonIcon icon={walkOutline}/> Trip type: {trip_type}</p>
+                                <p><IonIcon icon={walkOutline}/>{trip_type}</p>
                             </IonColWithoutPaddingLeft>
                             <IonColWithoutPaddingLeft>
-                                <p><IonIcon icon={mapOutline}/> How long: {how_long} km</p>
+                                <p><IonIcon icon={mapOutline}/>{how_long} km</p>
                             </IonColWithoutPaddingLeft>
                         </IonRow>
                         <IonRow>
                             <IonColWithoutPaddingLeft>
-                                <p><IonIcon icon={fitnessOutline}/> Trip difficulty: {trip_difficulty}</p>
+                                <p><IonIcon icon={fitnessOutline}/>{trip_difficulty}</p>
                             </IonColWithoutPaddingLeft>
                         </IonRow>
                     </IonGrid>

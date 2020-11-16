@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from "@apollo/client";
+import { useMutation, useQuery, useSubscription } from "@apollo/client";
 import { Plugins } from "@capacitor/core";
 import { IonAlert, IonBackButton, IonButton, IonButtons, IonCard, IonContent, IonHeader, IonIcon, IonItem, IonLabel, IonList, IonPage, IonRange, IonSpinner, IonTextarea, IonTitle, IonToolbar } from "@ionic/react";
 import gql from "graphql-tag";
@@ -13,7 +13,7 @@ import ITrip from "../models/ITrip";
 import { auth } from "../utils/nhost";
 
 const GET_COMMENTS = gql`
-query getCommentsById($trip_id: Int!) {
+subscription getCommentsById($trip_id: Int!) {
     trips_by_pk(id: $trip_id) {
       comments {
         text
@@ -67,7 +67,7 @@ const TripDetailPage = (props: any) => {
     const [comment, setComment] = useState<string>("")
     const [rating, setRating] = useState<number>(3)
 
-    const {loading, data} = useQuery<ICommentList>(GET_COMMENTS, {
+    const {loading, data} = useSubscription<ICommentList>(GET_COMMENTS, {
         variables: {
             trip_id: trip?.id
         },
@@ -118,7 +118,7 @@ const TripDetailPage = (props: any) => {
                     <IonButtons>
                         <IonBackButton defaultHref="/home"/>
                     </IonButtons>
-                    <IonTitle>Detail about trip</IonTitle>
+                    <IonTitle>Detaljer om turen</IonTitle>
                     {
                        trip.user.id === auth.getClaim("x-hasura-user-id") &&
                          <IonButtons slot="end">
@@ -153,15 +153,15 @@ const TripDetailPage = (props: any) => {
                 <TripDetailCard {...trip} />
                 <IonCard>
                     <IonList>
-                        <IonLabel> Rating:</IonLabel>
+                        <IonLabel> Omtaler:</IonLabel>
                         <IonItem>
                             <IonLabel>{rating}</IonLabel>
                             <IonRange min={0} max={5} snaps={true} ticks={false} placeholder="Rating" onIonChange={(e: any) => setRating(e.target.value)} />   
                         </IonItem>
                         <IonItem lines="none">
-                            <IonTextarea placeholder="Comment" onIonChange={(e: any) => setComment(e.target.value)} />
+                            <IonTextarea placeholder="Kommentar" onIonChange={(e: any) => setComment(e.target.value)} />
                         </IonItem>
-                        <PostCommentBtn onClick={insertComment}>Post comment</PostCommentBtn>
+                        <PostCommentBtn onClick={insertComment}>Send kommentar</PostCommentBtn>
                     </IonList>
                 </IonCard>
                 {

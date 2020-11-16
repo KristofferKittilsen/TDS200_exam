@@ -20,6 +20,9 @@ interface ITrip {
               id: number;
               display_name: string;
             }
+            user_followers: {
+              display_name: string;
+            }
           }
     }
 }

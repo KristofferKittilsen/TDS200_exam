@@ -20,7 +20,7 @@ const CommentsCard = ({id, text, rating, user}: IComment) => {
                         </IonRow>
                         <IonRow>
                             <IonCol>
-                                <IonCardSubtitle>Rated: {rating}</IonCardSubtitle>
+                                <IonCardSubtitle>Omtale: {rating}</IonCardSubtitle>
                             </IonCol>
                         </IonRow>
                     </IonGrid>

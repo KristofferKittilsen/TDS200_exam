@@ -18,7 +18,7 @@ const TripDetailCard = ({how_long, trip_description, id, image_filename, rating,
                         longitude
                     }
                 }}>
-                    <p><IonIcon icon={mapOutline}/>Show startpoint</p>
+                    <p><IonIcon icon={mapOutline}/>Se startpunkt</p>
                 </Link>
             )
         }
@@ -33,45 +33,45 @@ const TripDetailCard = ({how_long, trip_description, id, image_filename, rating,
             </IonCardHeader>
             <IonCardContent>
                 <IonCardSubtitle>
-                    Posted by: 
+                    Lagt ut av: 
                     <br></br>
                     <Link style={{textDecoration: "none"}}
                      to={{
-                         pathname: `/profile/${id}`,
+                         pathname: `/profile/${user.id}`,
                          state: {
-                             user: user
+                             userProfileId: user.id
                          }
                         }}>{user.display_name}</Link>
                 </IonCardSubtitle>
                 <IonGrid>
                     <IonRow>
                         <IonColWithoutPaddingLeft>
-                            <p><IonIcon icon={mapOutline}/> Area: {trip_area}</p>
+                            <p><IonIcon icon={mapOutline}/> Område: {trip_area}</p>
                         </IonColWithoutPaddingLeft>
                     </IonRow>
                     <IonRow>
                         <IonColWithoutPaddingLeft>
-                            <p><IonIcon icon={walkOutline}/> Type: {trip_type}</p>
+                            <p><IonIcon icon={walkOutline}/> Type tur: {trip_type}</p>
                         </IonColWithoutPaddingLeft>
                     </IonRow>
                     <IonRow>
                         <IonColWithoutPaddingLeft>
-                            <p><IonIcon icon={fitnessOutline}/> Difficulty: {trip_difficulty}</p>
+                            <p><IonIcon icon={fitnessOutline}/> Vanskelighetsgrad: {trip_difficulty}</p>
                         </IonColWithoutPaddingLeft>
                     </IonRow>
                     <IonRow>
                         <IonColWithoutPaddingLeft>
-                            <p><IonIcon icon={fitnessOutline}/> Length: {how_long} km</p>
+                            <p><IonIcon icon={fitnessOutline}/> Langde: {how_long} km</p>
                         </IonColWithoutPaddingLeft>
                     </IonRow>
                     <IonRow>
                         <IonColWithoutPaddingLeft>
-                            <p><IonIcon icon={fitnessOutline}/> Rating: {rating}</p>
+                            <p><IonIcon icon={fitnessOutline}/> Omtale: {rating}</p>
                         </IonColWithoutPaddingLeft>
                     </IonRow>
                     <IonRow>
                         <IonColWithoutPaddingLeft>
-                            <IonCardSubtitle>Trip description:</IonCardSubtitle>
+                            <IonCardSubtitle>Tur beskrivelse:</IonCardSubtitle>
                             <p>{trip_description}</p>
                         </IonColWithoutPaddingLeft>
                     </IonRow>

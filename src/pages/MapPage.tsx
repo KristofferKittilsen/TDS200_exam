@@ -24,18 +24,18 @@ const MapPage = (props: any) => {
 
     if (loadError) {
         console.log(loadError)
-        return  <IonLabel>Error loading maps</IonLabel>
+        return  <IonLabel>Problemer med innlastningen av kart</IonLabel>
     }
 
     if (!isLoaded) {
-        return <IonLabel>Loading maps</IonLabel>
+        return <IonLabel>Laster inn kart</IonLabel>
     }
 
     return (
         <IonPage>
             <IonHeader>
                 <IonToolbar>
-                  <IonTitle>Map page</IonTitle>
+                  <IonTitle>Kart</IonTitle>
                   <IonButtons>
                         <IonBackButton defaultHref="/home"/>
                     </IonButtons>

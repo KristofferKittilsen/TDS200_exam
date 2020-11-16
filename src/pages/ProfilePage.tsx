@@ -1,13 +1,42 @@
 import { useMutation, useSubscription } from "@apollo/client";
-import { IonAvatar, IonBackButton, IonButton, IonButtons, IonCard, IonCardTitle, IonCol, IonContent, IonGrid, IonHeader, IonItem, IonLabel, IonPage, IonRow, IonSpinner, IonTitle, IonToolbar } from "@ionic/react";
+import { Toast } from "@capacitor/core";
+import { IonBackButton, IonButton, IonButtons, IonCard, IonCardTitle, IonCol, IonContent, IonGrid, IonHeader, IonPage, IonRow, IonSpinner, IonTitle, IonToast, IonToolbar } from "@ionic/react";
 import gql from "graphql-tag";
-import React from "react";
+import React, { useState } from "react";
 import styled from 'styled-components';
 import ProfileCard from "../components/ProfileCard";
-import configData from "../config.json";
-import ITripList from "../models/ITripList";
+import ProfileDetailCard from "../components/ProfileDetailCard";
+import IUserList from "../models/IUserList";
 import { auth } from "../utils/nhost";
 
+
+const GET_USER_BY_ID = gql`
+subscription ($userId: uuid = "") {
+    users(where: {id: {_eq: $userId}}) {
+      id
+      display_name
+      avatar_url
+      posts {
+          id
+          image_filename
+          trip_area
+          how_long
+          trip_type
+          trip_difficulty
+          trip_description
+      }
+      followers {
+        id
+        user_following {
+          display_name
+        }
+        user_followers {
+          display_name
+        }
+      }
+    }
+  }
+`;
 
 const GET_TRIPS_BY_ID = gql`
 subscription ($userId: uuid = "") {
@@ -32,14 +61,21 @@ mutation InsertFollower($follower: followers_insert_input!){
   }
 `;
 
-const ProfilePage = (props: any) => {
 
-    const user: any = props.location?.state?.user;
 
-    const {loading, data} = useSubscription<ITripList>(
-        GET_TRIPS_BY_ID, 
-        {variables: {userId: user.id}}
+const ProfilePage = (props?: any) => {
+
+    const userProfileId: any = props?.location?.state?.userProfileId;
+
+    const {loading, data} = useSubscription<IUserList>(
+        GET_USER_BY_ID, 
+        {variables: {userId: userProfileId}}
     );
+
+    const [alreadyFollowing, setAlreadyFollowing] = useState<boolean>(true);
+    const [follower, setFollower] = useState<any>();
+
+    const [showToast, setShowToast] = useState<boolean>(false)
 
     const [insertFollowerMutation] = useMutation(INSERT_FOLLOWER);
 
@@ -48,18 +84,36 @@ const ProfilePage = (props: any) => {
     }
 
     const insertFollower = async () => {
-        try {
-            await insertFollowerMutation ({
-                variables: {
-                    follower: {
-                        user_followers_id: user.id,
-                        user_following_id: auth.getClaim('x-hasura-user-id')
+        checkIfFollow();
+        if (alreadyFollowing === false) {
+            try {
+                await insertFollowerMutation ({
+                    variables: {
+                        follower: {
+                            user_followers_id: userProfileId,
+                            user_following_id: auth.getClaim('x-hasura-user-id')
+                        }
                     }
-                }
-            })
-        } catch (e) {
-            console.error(e)
+                })
+            } catch (e) {
+                console.error(e)
+            }
         }
+        
+    }
+
+    const checkIfFollow = () => {
+
+        data?.users.map(user => {
+            if (userProfileId === user.id) {
+                console.log(`${userProfileId} = ${user.id}`)
+                setAlreadyFollowing(true);
+                setShowToast(true);
+            } else {
+                console.log("Not following")
+                setAlreadyFollowing(false);
+            }
+        })
     }
 
     return (
@@ -73,29 +127,30 @@ const ProfilePage = (props: any) => {
                 </IonToolbar>
             </IonHeader>
             <IonContent>
+                <IonToast 
+                    isOpen={showToast}
+                    onDidDismiss={() => setShowToast(false)}
+                    message= {`You are already following`}
+                    duration={1000}
+                />
                 <IonGrid>
                     <IonRow>
                         <IonCol>
                             <IonCardWithoutMarginTop>
-                                <IonRow>
-                                    <IonItem className="ion-no-padding">
-                                        <IonCol size="3">
-                                            <IonAvatar>
-                                                <img src={`${configData.IMAGE_ENDPOINT}${user.avatar_url}`}/>
-                                            </IonAvatar>
-                                        </IonCol>
-                                        <IonCol>
-                                            <IonCardTitleStyled>Email: {user.display_name}</IonCardTitleStyled>
-                                            <IonLabel>Followers: {user.followers.length}</IonLabel>
-                                        </IonCol>
-                                    </IonItem>
-                                </IonRow>
+                                {
+                                    data?.users.map((user, i) => (
+                                        <ProfileDetailCard key={`u-${i}`} {...user} />
+                                    ))
+                                }
+                                
                                 <IonRow>
                                     <IonCol>
                                         {
-                                            user.id !== auth.getClaim("x-hasura-user-id") ?
-                                            <ChatButton onClick={insertFollower}>Follow</ChatButton> :
-                                            <ChatButton disabled>Follow</ChatButton>
+                                            data?.users.map((user, i) => (
+                                                user?.id !== auth.getClaim("x-hasura-user-id") ?
+                                                <ChatButton key={`cb-${i}`} onClick={(insertFollower)}>Follow</ChatButton> :
+                                                <ChatButton key={`nothing-${i}`} disabled>Follow</ChatButton>
+                                            ))
                                         }
                                     </IonCol>
                                 </IonRow>
@@ -108,10 +163,8 @@ const ProfilePage = (props: any) => {
                             <IonCardTitleSentered>Trip Gallery</IonCardTitleSentered>         
                                 <IonRow>
                                     {
-                                        data?.trips.map(trip => ( 
-                                            <IonCol size="6" key={`ti-${trip.id}`}>
-                                                <ProfileCard {...trip} />
-                                            </IonCol>                
+                                        data?.users.map((user, i) => (
+                                            <ProfileCard key={`pc-${i}`} {...user} />   
                                         ))
                                     }
                                 </IonRow>                  

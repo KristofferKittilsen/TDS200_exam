@@ -142,7 +142,7 @@ const NewTrip = () => {
                     <IonButtons>
                         <IonBackButton defaultHref="/home"/>
                     </IonButtons>
-                    <IonTitle>New Trip Page</IonTitle>
+                    <IonTitle>Ny tur</IonTitle>
                 </IonToolbar>
             </IonHeader>
             <IonContent>
@@ -152,7 +152,7 @@ const NewTrip = () => {
                         <IonRow>
                             <IonCol>
                                 <IonItemStyled className="ion-no-padding">
-                                    <IonLabel>Area</IonLabel>
+                                    <IonLabel>Område</IonLabel>
                                     <IonInput onIonInput={(e: any) => setTripArea(e.target.value)} />
                                 </IonItemStyled>
                             </IonCol>
@@ -160,11 +160,11 @@ const NewTrip = () => {
                         <IonRow>
                             <IonCol>
                                 <IonItemStyled className="ion-no-padding">
-                                    <IonLabel>Type</IonLabel>
+                                    <IonLabel>Type tur</IonLabel>
                                     <IonSelect onIonChange={(e: any) => setTripType(e.target.value)}>
-                                        <IonSelectOption value="Walking">Walking</IonSelectOption>
-                                        <IonSelectOption value="jogging">Jogging</IonSelectOption>
-                                        <IonSelectOption value="running">Running</IonSelectOption>
+                                        <IonSelectOption value="Gåtur">Gåtur</IonSelectOption>
+                                        <IonSelectOption value="Joggetur">Joggetur</IonSelectOption>
+                                        <IonSelectOption value="Løpetur">Løpetur</IonSelectOption>
                                     </IonSelect>
                                 </IonItemStyled>
                             </IonCol>
@@ -172,21 +172,21 @@ const NewTrip = () => {
                         <IonRow>
                             <IonCol>
                                 <IonItemStyled className="ion-no-padding">
-                                    <IonLabel>Length in KM</IonLabel>
-                                    <IonInput type="number" placeholder="Length in KM" onIonInput={(e: any) => setHowLong(e.target.value)} />
+                                    <IonLabel>Lengde i KM</IonLabel>
+                                    <IonInput type="number" placeholder="Lengde i KM" onIonInput={(e: any) => setHowLong(e.target.value)} />
                                 </IonItemStyled>  
                             </IonCol>
                         </IonRow>
                         <IonRow>
                             <IonCol>
                                 <IonItemStyled className="ion-no-padding">
-                                    <IonLabel>Difficulty</IonLabel>
+                                    <IonLabel>Vanskelighetsgrad</IonLabel>
                                     <IonSelect onIonChange={(e: any) => setTripDifficulty(e.target.value)}>
-                                        <IonSelectOption value="very_easy">Very easy</IonSelectOption>
-                                        <IonSelectOption value="easy">Easy</IonSelectOption>
-                                        <IonSelectOption value="demanding">Demaning</IonSelectOption>
-                                        <IonSelectOption value="hard">Hard</IonSelectOption>
-                                        <IonSelectOption value="very_hard">Very hard</IonSelectOption>
+                                        <IonSelectOption value="very_easy">Veldig lett</IonSelectOption>
+                                        <IonSelectOption value="easy">Lett</IonSelectOption>
+                                        <IonSelectOption value="demanding">Krevende</IonSelectOption>
+                                        <IonSelectOption value="hard">Vanskelig</IonSelectOption>
+                                        <IonSelectOption value="very_hard">Veldig vanskelig</IonSelectOption>
                                     </IonSelect>
                                 </IonItemStyled>
                             </IonCol>
@@ -194,7 +194,7 @@ const NewTrip = () => {
                         <IonRow>
                             <IonCol>
                                 <IonItemStyled className="ion-no-padding">
-                                    <IonLabel>Rating</IonLabel>
+                                    <IonLabel>Omtale</IonLabel>
                                     <IonLabel>{rating}</IonLabel>
                                     <IonRange onIonChange={e => setRating(e.detail.value)} min={0} max={5} snaps={true} ticks={false}/>
                                 </IonItemStyled>
@@ -203,7 +203,7 @@ const NewTrip = () => {
                         <IonRow>
                             <IonCol>
                                 <IonItemStyled className="ion-no-padding">
-                                    <IonLabel>Description</IonLabel>
+                                    <IonLabel>Beskrivelse</IonLabel>
                                     <IonInput placeholder="Description" onIonInput={(e: any) => settripDescription(e.target.value)} />
                                 </IonItemStyled>
                             </IonCol>
@@ -211,7 +211,7 @@ const NewTrip = () => {
                         <IonRow>
                             <IonCol>
                                 <IonItemStyled className="ion-no-padding">
-                                    <IonLabel>Use your current location?</IonLabel>
+                                    <IonLabel>Bruke din nåværende posisjon?</IonLabel>
                                     <IonCheckbox checked={checked} onClick={getGeoLocation} onIonChange={e => setChecked(e.detail.checked)} />
                                 </IonItemStyled>
                             </IonCol>
