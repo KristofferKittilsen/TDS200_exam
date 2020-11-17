@@ -9,7 +9,7 @@ import { auth } from "../utils/nhost";
 
 const UNFOLLOW_USER = gql`
 mutation ($userId: uuid = "", $followingId: uuid = "") {
-    delete_followers(where: {_and: {user_following_id: {_eq: $userId}}, user_followers_id: {_eq: "04293401-2ee2-49fd-90d3-aa0f4787eebf"}}) {
+    delete_followers(where: {_and: {user_following_id: {_eq: $userId}}, user_followers_id: {_eq: $followingId}}) {
       affected_rows
     }
   }  
@@ -22,20 +22,14 @@ const UserFollowing = (props: any) => {
     const [unfollowMutation] = useMutation(UNFOLLOW_USER);
     const [showToast, setShowToast] = useState<boolean>(false);
 
-    const doSomething = () => {
-        following.map((f: any) => {
-            console.log(auth.getClaim('x-hasura-user-id'))
-            console.log(f.user_followers.id)
-            return f.user_followers.id;
-        })
-    }
+    const [fId, setFId] = useState<any>(following.map((f: any) => {return f.user_followers.id}))
 
     const unfollowUser = async () => {
         try {
             await unfollowMutation ({
                 variables: {
                     userId: auth.getClaim('x-hasura-user-id'),
-                    followingId: doSomething()
+                    followingId: fId[0]
                 }
             })
             setShowToast(true);
@@ -51,7 +45,7 @@ const UserFollowing = (props: any) => {
                     <IonButtons>
                         <IonBackButton defaultHref="/home" />
                     </IonButtons>
-                    <IonTitle>Følgere</IonTitle>
+                    <IonTitle>Følger</IonTitle>
                 </IonToolbar>
             </IonHeader>
             <IonContent>
