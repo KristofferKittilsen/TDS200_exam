@@ -17,29 +17,29 @@ const PostInfoCard = ({id, how_long, rating, trip_area, trip_difficulty, trip_ty
                 <IonCardSubtitle>
                     {trip_area}
                 </IonCardSubtitle>
-                <IonCardContentStyled>
-                    <IonGrid>
-                        <IonRow>
-                            <IonCol>
-                                
-                            </IonCol>
-                        </IonRow>
-                        <IonRow>
-                            <IonColWithoutPaddingLeft>
-                                <p><IonIcon icon={walkOutline}/>{trip_type}</p>
-                            </IonColWithoutPaddingLeft>
-                            <IonColWithoutPaddingLeft>
-                                <p><IonIcon icon={mapOutline}/>{how_long} km</p>
-                            </IonColWithoutPaddingLeft>
-                        </IonRow>
-                        <IonRow>
-                            <IonColWithoutPaddingLeft>
-                                <p><IonIcon icon={fitnessOutline}/>{trip_difficulty}</p>
-                            </IonColWithoutPaddingLeft>
-                        </IonRow>
-                    </IonGrid>
-                </IonCardContentStyled>
             </IonCardHeader>
+            <IonCardContentStyled>
+                <IonGrid>
+                    <IonRow>
+                        <IonCol>
+                            
+                        </IonCol>
+                    </IonRow>
+                    <IonRow>
+                        <IonColWithoutPaddingLeft>
+                            <p><IonIcon icon={walkOutline}/>{trip_type}</p>
+                        </IonColWithoutPaddingLeft>
+                        <IonColWithoutPaddingLeft>
+                            <p><IonIcon icon={mapOutline}/>{how_long} km</p>
+                        </IonColWithoutPaddingLeft>
+                    </IonRow>
+                    <IonRow>
+                        <IonColWithoutPaddingLeft>
+                            <p><IonIcon icon={fitnessOutline}/>{trip_difficulty}</p>
+                        </IonColWithoutPaddingLeft>
+                    </IonRow>
+                </IonGrid>
+            </IonCardContentStyled>
         </IonCard>
     )
 }

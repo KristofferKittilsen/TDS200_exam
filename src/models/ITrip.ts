@@ -24,6 +24,11 @@ interface ITrip {
               display_name: string;
             }
           }
+        following: {
+          user_followers: {
+            display_name: string;
+          }
+        }
     }
 }
 

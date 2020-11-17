@@ -2,7 +2,7 @@ interface IUser {
     id: string;
     display_name: string;
     avatar_url: string;
-    posts: {
+    trips: {
         id: number;
         image_filename: string;
         trip_area: string;
@@ -17,9 +17,27 @@ interface IUser {
           display_name: string;
         }
         user_followers: {
+          id: number;
           display_name: string;
         }
       }
+    following: {
+      id: number;
+      user_followers: {
+        display_name: string;
+        id: string;
+        trips: {
+          image_filename: string;
+        }
+      }
+      user_following: {
+        display_name: string;
+        id: string;
+        trips: {
+          image_filename: string;
+        }
+      }
+    }
 }
 
 export default IUser;

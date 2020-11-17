@@ -1,15 +1,16 @@
-import { useQuery, useSubscription } from '@apollo/client';
-import { IonAvatar, IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonLabel, IonPage, IonSpinner, IonTitle, IonToolbar } from '@ionic/react';
+import { useSubscription } from '@apollo/client';
+import { IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonLabel, IonPage, IonRouterOutlet, IonSegment, IonSegmentButton, IonSpinner, IonTitle, IonToolbar } from '@ionic/react';
+import { IonReactRouter } from '@ionic/react-router';
 import gql from 'graphql-tag';
 import { exitOutline } from "ionicons/icons";
 import React from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { BrowserRouter, Link, Route, Router, Switch, useHistory } from 'react-router-dom';
 import styled from 'styled-components';
 import NavigationFabs from '../components/NavigationFabs';
 import PostInfoCard from "../components/PostInfoCard";
-import configData from "../config.json";
 import ITripList from "../models/ITripList";
 import { auth } from '../utils/nhost';
+import FollowingPage from './FollwingPage';
 
 const GET_TRIPS = gql`
 subscription {
@@ -45,19 +46,9 @@ subscription {
 const Home = () => {
   
   const {loading, data} = useSubscription<ITripList>(GET_TRIPS);
-  let history = useHistory();
 
   if (loading) {
     return <IonSpinnerStyled name="crescent" />
-  }
-
-  const logout = async () => {
-    try {
-      await auth.logout();
-      history.replace("/");
-    } catch (e) {
-      console.error(e);
-    }
   }
 
   return (
@@ -65,9 +56,7 @@ const Home = () => {
       <IonHeader>
         <IonToolbar>
           <IonButtons slot="start">
-            <IonButton onClick={logout}>
-              <IonIconTurned icon={exitOutline}/>
-            </IonButton>
+            <Link style={{textDecoration: "none"}} to="/following">Følger</Link>
           </IonButtons>
           
           <Link slot="end" style={{textDecoration: "none"}} to={{
@@ -83,6 +72,7 @@ const Home = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
+      
         {
           data?.trips.map(trip => (
             <Link style={{textDecoration: "none"}} key={trip.id} to={{

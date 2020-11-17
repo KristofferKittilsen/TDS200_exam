@@ -29,6 +29,9 @@ import './theme/variables.css';
 import { auth } from './utils/nhost';
 import PrivateRoute from './components/PrivateRoute';
 import MapPage from './pages/MapPage';
+import FollowingPage from './pages/FollwingPage';
+import UserFollowers from './pages/UserFollowers';
+import UserFollowing from './pages/UserFollowing';
 
 const App: React.FC = () => (
   <NhostAuthProvider auth={auth}>
@@ -38,12 +41,15 @@ const App: React.FC = () => (
           <IonRouterOutlet>
             <Route path="/frontpage" component={FrontPage} exact={true} />
             <Route path="/home" component={Home} exact={true} />
+            <PrivateRoute path="/following" component={FollowingPage} exact={true} />
+            <PrivateRoute path="/userfollowers" component={UserFollowers} exact={true} />
+            <PrivateRoute path="/userfollowing" component={UserFollowing} exact={true} />
             <Route path="/login" component={Login} exact={true} />
             <Route path="/signup" component={Signup} exact={true} />
             <PrivateRoute path="/map" component={MapPage} exact={true} />
-            <Route path="/profile/:id" component={ProfilePage} exact={true} />
+            <PrivateRoute path="/profile/:id" component={ProfilePage} exact={true} />
             <PrivateRoute path="/newTrip" component={NewTrip} exact={true} />
-            <Route path="/tripdetails/:id" component={TripDetailPage} exact={true} />
+            <PrivateRoute path="/tripdetails/:id" component={TripDetailPage} exact={true} />
             <Route exact path="/" render={() => <Redirect to="/frontpage" />} />
           </IonRouterOutlet>
         </IonReactRouter>

@@ -4,20 +4,20 @@ import styled from 'styled-components';
 import configData from "../config.json";
 import IUser from "../models/IUser";
 
-const ProfileCard = ({posts}: IUser) => {
+const ProfileCard = ({trips}: IUser) => {
 
-    const [post, setPost] = useState<any>(posts);
+    const [trip, setPost] = useState<any>(trips);
     
     return (
         <>
             {
-                post.map((p: any, i: any) => (
+                trip.map((t: any, i: any) => (
                     <IonCard key={`up-${i}`}>
                         <IonCardTitle>
-                            <img src={`${configData.IMAGE_ENDPOINT}${p.image_filename}`} />
+                            <img src={`${configData.IMAGE_ENDPOINT}${t.image_filename}`} />
                         </IonCardTitle>
                         <IonCardContentStyled>
-                            <IonLabelStyled>Area: {p.trip_area}</IonLabelStyled>
+                            <IonLabelStyled>Area: {t.trip_area}</IonLabelStyled>
                         </IonCardContentStyled>
                     </IonCard>
                 ))
