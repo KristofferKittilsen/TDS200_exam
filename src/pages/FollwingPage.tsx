@@ -1,14 +1,10 @@
 import { useSubscription } from "@apollo/client";
-import { IonBackButton, IonButton, IonButtons, IonContent, IonHeader, IonLabel, IonPage, IonSpinner, IonTitle, IonToolbar } from "@ionic/react";
+import { IonBackButton, IonButtons, IonContent, IonHeader, IonPage, IonSpinner, IonTitle, IonToolbar } from "@ionic/react";
 import gql from "graphql-tag";
 import React from "react";
 import { Link } from "react-router-dom";
 import FollowingCard from "../components/FollowingCard";
-import PostInfoCard from "../components/PostInfoCard";
 import IFollowingList from "../models/IFollowingList";
-import ITripList from "../models/ITripList";
-import IUser from "../models/IUser";
-import IUserList from "../models/IUserList";
 import { auth } from "../utils/nhost";
 
 const GET_FOLLOWING_TRIPS = gql`

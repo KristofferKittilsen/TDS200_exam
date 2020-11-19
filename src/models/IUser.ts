@@ -1,3 +1,5 @@
+//Inspired by lectures
+
 interface IUser {
     id: string;
     display_name: string;

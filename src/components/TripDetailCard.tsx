@@ -6,7 +6,9 @@ import styled from 'styled-components';
 import configData from "../config.json";
 import ITrip from "../models/ITrip";
 
-const TripDetailCard = ({how_long, trip_description, id, image_filename, rating, trip_area, trip_difficulty, trip_type, user, latitude, longitude}: ITrip) => {
+const TripDetailCard = ({how_long, trip_description, id, image_filename, rating, trip_area, trip_difficulty, trip_type, user, latitude, longitude, endlat, endlng}: ITrip) => {
+
+    //Inpired by lectures, not checkCoords(that i figured out myself).
 
     const checkCoords = () => {
         if (longitude || latitude != null) {
@@ -15,7 +17,9 @@ const TripDetailCard = ({how_long, trip_description, id, image_filename, rating,
                     pathname: "/map",
                     state: {
                         latitude,
-                        longitude
+                        longitude,
+                        endlat,
+                        endlng
                     }
                 }}>
                     <p><IonIcon icon={mapOutline}/>Se startpunkt</p>
@@ -78,6 +82,7 @@ const TripDetailCard = ({how_long, trip_description, id, image_filename, rating,
                     <IonRow>
                         <IonColWithoutPaddingLeft>
                             {checkCoords()}
+                            {console.log(endlat, endlng)}
                         </IonColWithoutPaddingLeft>
                     </IonRow>
                 </IonGrid>

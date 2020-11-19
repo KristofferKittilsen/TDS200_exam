@@ -11,6 +11,9 @@ const waveBackgroundString = encodeURIComponent(renderToStaticMarkup(<WaveBackgr
 
 const Login = () => {
 
+    //Implementation of WaveBackgroundString (Blob), is taken from lecture.
+    //AuthUser is taken from lecture.
+
     let history = useHistory();
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");

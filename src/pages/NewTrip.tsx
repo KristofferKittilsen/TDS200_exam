@@ -8,6 +8,9 @@ import React, { useState } from "react";
 import { useHistory } from "react-router";
 import styled from 'styled-components';
 import { auth, storage } from "../utils/nhost";
+import configData from "../config.json";
+import { GoogleMap, Marker, useLoadScript } from "@react-google-maps/api";
+import mapStyles from "../components/mapStyles";
 
 const INSERT_TRIP = gql`
 mutation InsertTrip($trip: trips_insert_input!) {
@@ -22,8 +25,10 @@ mutation InsertTrip($trip: trips_insert_input!) {
       trip_description
       longitude
       latitude
-    }
-  }
+      endlat
+      endlng
+  } 
+}
 `
 
 const useImageUpload = () => {
@@ -48,6 +53,11 @@ const useImageUpload = () => {
 
 const NewTrip = () => {
 
+    //INSERT_TRIP inspired by INSERT_POST from lectures.
+    //useImageUpload(), openCamera(), uploadImage() and insertTrip() inspired from lectures.
+    //Geolocation inspired from https://capacitorjs.com/docs/apis/geolocation.
+
+
     const {photo, getPhoto} = useCamera();
     const [filename, setFilename] = useState<string>("");
     const { startUploading, uploadProgress } = useImageUpload();
@@ -68,6 +78,8 @@ const NewTrip = () => {
     const {Geolocation} = Plugins;
 
     const [checked, setChecked] = useState<boolean>(false);
+
+    const [markers, setMarkers] = useState<any>([]);
 
     const openCamera = async () => {
         await getPhoto ({
@@ -125,7 +137,9 @@ const NewTrip = () => {
                         trip_type: tripType,
                         trip_description: tripDescription,
                         latitude: latitude,
-                        longitude: longitude
+                        longitude: longitude,
+                        endlat: markers[0].lat,
+                        endlng: markers[0].lng
                     }
                 }
             });
@@ -133,6 +147,30 @@ const NewTrip = () => {
         } catch (e) {
             console.error(e);
         }
+    }
+
+    const {isLoaded, loadError} = useLoadScript ({
+        googleMapsApiKey: configData.GOOGLE_MAPS_API_KEY,
+    });
+
+    const coords = {
+        lat: latitude,
+        lng: longitude
+    };
+
+    const options = {
+        styles: mapStyles,
+        disableDefaultUI: true,
+        zoomControl: true,
+    }
+
+    if (loadError) {
+        console.error(loadError)
+        return  <IonLabel>Problemer med innlastningen av kart</IonLabel>
+    }
+
+    if (!isLoaded) {
+        return <IonLabel>Laster inn kart</IonLabel>
     }
     
     return (
@@ -182,11 +220,11 @@ const NewTrip = () => {
                                 <IonItemStyled className="ion-no-padding">
                                     <IonLabel>Vanskelighetsgrad</IonLabel>
                                     <IonSelect onIonChange={(e: any) => setTripDifficulty(e.target.value)}>
-                                        <IonSelectOption value="very_easy">Veldig lett</IonSelectOption>
-                                        <IonSelectOption value="easy">Lett</IonSelectOption>
-                                        <IonSelectOption value="demanding">Krevende</IonSelectOption>
-                                        <IonSelectOption value="hard">Vanskelig</IonSelectOption>
-                                        <IonSelectOption value="very_hard">Veldig vanskelig</IonSelectOption>
+                                        <IonSelectOption value="Veldig_lett">Veldig lett</IonSelectOption>
+                                        <IonSelectOption value="Lett">Lett</IonSelectOption>
+                                        <IonSelectOption value="Krevende">Krevende</IonSelectOption>
+                                        <IonSelectOption value="Vanskelig">Vanskelig</IonSelectOption>
+                                        <IonSelectOption value="Veldig_vanskelig">Veldig vanskelig</IonSelectOption>
                                     </IonSelect>
                                 </IonItemStyled>
                             </IonCol>
@@ -211,10 +249,36 @@ const NewTrip = () => {
                         <IonRow>
                             <IonCol>
                                 <IonItemStyled className="ion-no-padding">
-                                    <IonLabel>Bruke din nåværende posisjon?</IonLabel>
+                                    <IonLabel>Bruk kart til å vise tur</IonLabel>
                                     <IonCheckbox checked={checked} onClick={getGeoLocation} onIonChange={e => setChecked(e.detail.checked)} />
                                 </IonItemStyled>
                             </IonCol>
+                        </IonRow>
+                        <IonRow>
+                            {
+                                latitude || longitude === null ?
+                                <GoogleMap 
+                                    mapContainerStyle={{width: "100vw", height: "50vh"}} 
+                                    zoom={12} 
+                                    center={coords}
+                                    options={options}
+                                    onClick={(e) => {
+                                        setMarkers((c: any) => [
+                                            ...c, {
+                                                lat: e.latLng.lat(),
+                                                lng: e.latLng.lng(),
+                                                time: new Date()
+                                            }
+                                        ])
+                                    }}
+                                    >
+                                        <Marker label="Start" position={coords}/>
+                                        {markers.map((marker: any) => (
+                                            <Marker key={marker.time.toISOString()} position={{lat: marker.lat, lng: marker.lng}} />
+                                        ))}
+                                </GoogleMap> :
+                                <div></div>
+                            }
                         </IonRow>
                         <IonRow>
                             <IonColStyled size="2">

@@ -1,5 +1,5 @@
 import { IonButton, IonCol, IonContent, IonGrid, IonIcon, IonInput, IonItem, IonPage, IonRow } from "@ionic/react";
-import { lockClosedOutline, mailOutline } from "ionicons/icons";
+import { lockClosedOutline, mailOutline, personAddOutline } from "ionicons/icons";
 import React, { useState } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { useHistory } from "react-router";
@@ -11,13 +11,17 @@ const waveBackgroundString = encodeURIComponent(renderToStaticMarkup(<WaveBackgr
 
 const Signup = () => {
 
+    //Signup page inspired from lectures.
+
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
+    const [firstname, setFirstname] = useState<string>("");
+    const [lastname, setLastname] = useState<string>("");
     let history = useHistory();
 
     const userSignUp = async () => {
         try {
-            await auth.register(email, password);
+            await auth.register(email, password, {display_name: `${firstname.charAt(0).toUpperCase() + firstname.slice(1)} ${lastname.charAt(0).toUpperCase() + lastname.slice(1)}`});
             history.replace("/login");
         } catch (e) {
             console.error(e);
@@ -36,7 +40,7 @@ const Signup = () => {
                     <IonRow>
                         <IonCol> 
                             <IonItem>
-                                <IonInput placeholder="Email" onIonInput={(e: any) => setEmail(e.target.value)} >
+                                <IonInput placeholder="Epost" onIonInput={(e: any) => setEmail(e.target.value)} >
                                     <IonIcon icon={mailOutline}/>
                                 </IonInput>
                             </IonItem>
@@ -45,7 +49,23 @@ const Signup = () => {
                     <IonRow>
                         <IonCol>
                             <IonItem>
-                                <IonInput type="password" placeholder="Password" onIonInput={(e: any) => setPassword(e.target.value)} >
+                                <IonInput placeholder="Fornavn" onIonInput={(e: any) => setFirstname(e.target.value)} >
+                                    <IonIcon icon={personAddOutline}/>
+                                </IonInput>
+                            </IonItem>
+                        </IonCol>
+                        <IonCol>
+                            <IonItem>
+                                <IonInput placeholder="Etternavn" onIonInput={(e: any) => setLastname(e.target.value)} >
+                                    <IonIcon icon={personAddOutline}/>
+                                </IonInput>
+                            </IonItem>
+                        </IonCol>
+                    </IonRow>
+                    <IonRow>
+                        <IonCol>
+                            <IonItem>
+                                <IonInput type="password" placeholder="Passord" onIonInput={(e: any) => setPassword(e.target.value)} >
                                     <IonIcon icon={lockClosedOutline}/>
                                 </IonInput>
                             </IonItem>

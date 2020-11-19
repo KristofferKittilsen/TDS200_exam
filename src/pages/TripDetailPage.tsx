@@ -58,6 +58,10 @@ mutation DeleteTrip($trip_id: Int!) {
 
 const TripDetailPage = (props: any) => {
 
+    //The comments functions aswell as the GQL is inspired by lectures
+    //Delete trips inspired by DELETE_POSTS from lectures
+    //The delete button funtion in return is inspired by lectures
+
     const trip: ITrip = props.location?.state?.trip;
 
     const [deleteTripMutation] = useMutation(DELETE_TRIP);

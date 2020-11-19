@@ -34,6 +34,9 @@ import UserFollowers from './pages/UserFollowers';
 import UserFollowing from './pages/UserFollowing';
 
 const App: React.FC = () => (
+
+  //Inspired by lectures aswell as nhost docs
+
   <NhostAuthProvider auth={auth}>
     <NhostApolloProvider auth={auth} gqlEndpoint={configData.ENDPOINT}>
       <IonApp>

@@ -9,6 +9,9 @@ type PrivateRouteProps = {
 }
 
 const PrivateRoute = ({component, path, exact}: PrivateRouteProps) => {
+
+    //Inpired by lectures and nhost docs
+
     const {signedIn} = useAuth();
 
     return signedIn ? 

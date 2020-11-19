@@ -1,3 +1,4 @@
+//Inspired by lectures
 
 interface ITrip {
     id: number;
@@ -10,6 +11,8 @@ interface ITrip {
     trip_description: string;
     longitude: number;
     latitude: number;
+    endlat: number;
+    endlng: number;
     user: {
         id: string;
         display_name: string;

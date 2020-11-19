@@ -1,3 +1,5 @@
+//Inspired by lectures
+
 interface IComment {
     id: number;
     text: string;

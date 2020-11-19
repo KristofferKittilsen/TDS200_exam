@@ -1,16 +1,13 @@
 import { useSubscription } from '@apollo/client';
-import { IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonLabel, IonPage, IonRouterOutlet, IonSegment, IonSegmentButton, IonSpinner, IonTitle, IonToolbar } from '@ionic/react';
-import { IonReactRouter } from '@ionic/react-router';
+import { IonButtons, IonContent, IonHeader, IonIcon, IonLabel, IonPage, IonSpinner, IonTitle, IonToolbar } from '@ionic/react';
 import gql from 'graphql-tag';
-import { exitOutline } from "ionicons/icons";
 import React from 'react';
-import { BrowserRouter, Link, Route, Router, Switch, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import NavigationFabs from '../components/NavigationFabs';
-import PostInfoCard from "../components/PostInfoCard";
+import TripsInfoCard from '../components/TripsInfoCard';
 import ITripList from "../models/ITripList";
 import { auth } from '../utils/nhost';
-import FollowingPage from './FollwingPage';
 
 const GET_TRIPS = gql`
 subscription {
@@ -25,6 +22,8 @@ subscription {
     trip_description
     latitude
     longitude  
+    endlat
+    endlng
     user {
       id
       display_name
@@ -44,6 +43,10 @@ subscription {
 `;
 
 const Home = () => {
+
+  //Used lectures to make GET_TRIPS and useSubscription with ITrip (IPost in lectures).
+  //Used lectures to learn how to fetch the userId via auth.getClaim
+  //Used lectures to learn how to user maps to render all trips
   
   const {loading, data} = useSubscription<ITripList>(GET_TRIPS);
 
@@ -58,15 +61,17 @@ const Home = () => {
           <IonButtons slot="start">
             <Link style={{textDecoration: "none"}} to="/following">Følger</Link>
           </IonButtons>
+          <IonButtons slot="end">
+            <Link style={{textDecoration: "none"}} to={{
+              pathname: `/profile/${auth.getClaim("x-hasura-user-id")}`,
+              state: {
+                userProfileId: auth.getClaim("x-hasura-user-id")
+              }
+            }}>
+            <IonLabel>Profil</IonLabel>
+            </Link>
+          </IonButtons>
           
-          <Link slot="end" style={{textDecoration: "none"}} to={{
-            pathname: `/profile/${auth.getClaim("x-hasura-user-id")}`,
-            state: {
-              userProfileId: auth.getClaim("x-hasura-user-id")
-            }
-          }}>
-            <IonLabel>Profile</IonLabel>
-          </Link>
           
           <IonTitle>Ut på tur</IonTitle>
         </IonToolbar>
@@ -81,7 +86,7 @@ const Home = () => {
                 trip
               }
             }}>
-              <PostInfoCard {...trip}/>
+              <TripsInfoCard {...trip}/>
             </Link>
           ))
         }

@@ -3,6 +3,8 @@ import { isPlatform } from "@ionic/react";
 import { Plugins } from "@capacitor/core";
 import configData from "../config.json";
 
+//Inpired by lectures
+
 const { Storage } = Plugins;
 
 let config;

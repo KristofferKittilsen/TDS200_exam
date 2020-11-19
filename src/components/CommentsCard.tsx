@@ -5,6 +5,9 @@ import styled from 'styled-components';
 import configData from "../config.json";
 
 const CommentsCard = ({id, text, rating, user}: IComment) => {
+
+    //Inspired by lectures
+
     return (
         <IonCard>
             <IonCardHeader>

@@ -1,12 +1,15 @@
 import { useMutation, useSubscription } from "@apollo/client";
-import { IonBackButton, IonButton, IonButtons, IonCard, IonCardTitle, IonCol, IonContent, IonGrid, IonHeader, IonPage, IonRow, IonSpinner, IonTitle, IonToast, IonToolbar } from "@ionic/react";
+import { useCamera } from "@capacitor-community/react-hooks/camera";
+import { CameraResultType } from "@capacitor/core";
+import { IonBackButton, IonButton, IonButtons, IonCard, IonCardTitle, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonLabel, IonModal, IonPage, IonRow, IonSpinner, IonTitle, IonToast, IonToolbar } from "@ionic/react";
 import gql from "graphql-tag";
+import { cameraOutline, cloudUploadOutline, sendOutline } from "ionicons/icons";
 import React, { useState } from "react";
 import styled from 'styled-components';
 import ProfileCard from "../components/ProfileCard";
 import ProfileDetailCard from "../components/ProfileDetailCard";
 import IUserList from "../models/IUserList";
-import { auth } from "../utils/nhost";
+import { auth, storage } from "../utils/nhost";
 
 
 const GET_USER_BY_ID = gql`
@@ -58,9 +61,38 @@ mutation InsertFollower($follower: followers_insert_input!){
   }
 `;
 
+const UPDATE_AVATAR_URL = gql`
+mutation ($userId: uuid, $avatarUrl: String) {
+    update_users(_set: {avatar_url: $avatarUrl}, where: {id: {_eq: $userId}}) {
+      affected_rows
+    }
+  }  
+`;
 
+const useImageUpload = () => {
+    const [uploadProgress, setUploadProgress] = useState<number>(0);
+
+    const startUploading = async ({base64string, filenameWithExtension}: {base64string: string, filenameWithExtension: string}) => {
+        try {
+            await storage.putString(`/public/${filenameWithExtension}`, base64string, "data_url", null, (pe: ProgressEvent) => {
+                setUploadProgress((pe.loaded / pe.total) * 100);
+            });
+        } catch (e) {
+            console.warn(e);
+        }
+    };
+
+    return {
+        uploadProgress,
+        startUploading
+    }
+
+};
 
 const ProfilePage = (props?: any) => {
+
+    //useImageUpload(), openCamera() and uploadImage() inspired from lectures.
+    //updateAvatarUrl inspired from insertTrip() from lectures.
 
     const userProfileId: any = props?.location?.state?.userProfileId;
 
@@ -69,9 +101,18 @@ const ProfilePage = (props?: any) => {
         {variables: {userId: userProfileId}}
     );
 
-    const [showToast, setShowToast] = useState<boolean>(false)
+    const [showToast, setShowToast] = useState<boolean>(false);
+    const [showModal, setShowModal] = useState<boolean>(false);
 
     const [insertFollowerMutation] = useMutation(INSERT_FOLLOWER);
+    const [updateAvatarUrlMutaton] = useMutation(UPDATE_AVATAR_URL);
+
+    const {photo, getPhoto} = useCamera();
+    const [filename, setFilename] = useState<string>("");
+    const { startUploading, uploadProgress } = useImageUpload();
+    const [uploadPicture, setUploadPicture] = useState<string>("");
+    const [isUploadingPic, setIsUploadingPic] = useState<boolean>(false);
+    
 
     if (loading) {
         return <IonSpinner name="crescent" />
@@ -93,8 +134,93 @@ const ProfilePage = (props?: any) => {
         }
     }
 
+    const openCamera = async () => {
+        await getPhoto ({
+            resultType: CameraResultType.DataUrl,
+            quality: 20,
+            allowEditing: false
+        });
+        setFilename(`profile${Date.now().toString()}.jpeg`)
+    }
+
+    const uploadImage = async () => {
+        setIsUploadingPic(true)
+        if (photo?.dataUrl) {
+            await startUploading ({
+                base64string: photo.dataUrl,
+                filenameWithExtension: filename
+            })
+            setIsUploadingPic(false)
+            setUploadPicture("Picture uploaded")
+        } else {
+            setIsUploadingPic(false)
+            alert("You have to take a photo")
+        }
+    }
+
+    const updateAvatarUrl = async () => {
+        try {
+            await updateAvatarUrlMutaton ({
+                variables: {
+                    userId: auth.getClaim('x-hasura-user-id'),
+                    avatarUrl: filename
+                }
+            });
+            console.log("Ran updateUrl");
+            setShowModal(false);
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
     return (
         <IonPage>
+
+            <IonModal
+                isOpen={showModal}
+            >
+                <IonHeader>
+                    <IonToolbar>
+                        <IonTitle>Endre profilbilde</IonTitle>
+                        <IonButtons slot="end">
+                            <IonButton onClick={() => setShowModal(false)}>Lukk</IonButton>
+                        </IonButtons>
+                    </IonToolbar>
+                </IonHeader>
+                <IonContent>
+                    <IonGrid>
+                        <IonRow>
+                            <IonColStyled>
+                                <img src={photo?.dataUrl} />
+                            </IonColStyled>
+                        </IonRow>
+                        <IonRow>
+                            <IonColStyled size="2">
+                                <IonButton onClick={openCamera}>
+                                    <IonIcon icon={cameraOutline} />
+                                </IonButton>
+                            </IonColStyled>
+
+                            <IonColStyled size="5">
+                                <IonButton onClick={uploadImage}>
+                                    {
+                                        isUploadingPic ?
+                                            <IonSpinner name="crescent" /> :
+                                            <IonIcon icon={cloudUploadOutline} />
+                                    }
+                                </IonButton>
+                            </IonColStyled>
+
+                            <IonColStyled size="2">
+                                <IonButton onClick={updateAvatarUrl}>
+                                    <IonIcon icon={sendOutline} />
+                                </IonButton>
+                            </IonColStyled>
+                        </IonRow>
+                    </IonGrid>
+                </IonContent>
+            </IonModal>
+
             <IonHeader>
                 <IonToolbar>
                     <IonTitle>Min profil</IonTitle>
@@ -121,12 +247,21 @@ const ProfilePage = (props?: any) => {
                                 }
                                 
                                 <IonRow>
-                                    <IonCol>
+                                    <IonCol size="8">
                                         {
                                             data?.users.map((user, i) => (
                                                 user?.id !== auth.getClaim("x-hasura-user-id") ?
                                                 <FollowButton key={`cb-${i}`} onClick={(insertFollower)}>Følg</FollowButton> :
                                                 <FollowButton key={`nothing-${i}`} disabled>Følg</FollowButton>
+                                            ))
+                                        }
+                                    </IonCol>
+                                    <IonCol>
+                                        {
+                                            data?.users.map((user, i) => (
+                                                user?.id === auth.getClaim("x-hasura-user-id") ?
+                                                <FollowButton key={`cb-${i}`} onClick={() => setShowModal(true)}>Endre profilbilde</FollowButton> :
+                                                <div></div>
                                             ))
                                         }
                                     </IonCol>
@@ -137,7 +272,7 @@ const ProfilePage = (props?: any) => {
                     <IonRow>
                         <IonCol>
                             <IonCardWithoutMarginTop>
-                            <IonCardTitleSentered>Trip Gallery</IonCardTitleSentered>         
+                            <IonCardTitleSentered>Tur galleri</IonCardTitleSentered>         
                                 <IonRow>
                                     {
                                         data?.users.map((user, i) => (
@@ -172,6 +307,10 @@ const IonCardTitleStyled = styled(IonCardTitle)`
 
 const FollowButton = styled(IonButton)`
     font-size: 0.7em;
+`;
+
+const IonColStyled = styled(IonCol)`
+    margin-left: 5%;
 `;
 
 

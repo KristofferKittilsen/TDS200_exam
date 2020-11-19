@@ -9,11 +9,12 @@ const ProfileDetailCard = ({avatar_url, display_name, followers, following}: IUs
 
     const [follower, setFollower] = useState<any>(followers);
     const [userFollowing, setUserFollowing] = useState<any>(following);
-
+    const [displayName, setDisplayName] = useState<string>(display_name.charAt(0).toUpperCase() + display_name.slice(1))
+   
     return(
         <>    
             <IonRow>
-                <IonItem className="ion-no-padding">
+                <IonItemWidth className="ion-no-padding">
                     <IonCol size="3">
                         <IonAvatar>
                             <img src={`${configData.IMAGE_ENDPOINT}${avatar_url}`}/>
@@ -22,11 +23,11 @@ const ProfileDetailCard = ({avatar_url, display_name, followers, following}: IUs
                     <IonCol>
                         <IonGrid>
                             <IonRow>
-                                <IonCardTitleStyled>Epost: {display_name}</IonCardTitleStyled>
+                                <IonCardTitleStyled>{displayName}</IonCardTitleStyled>
                             </IonRow>
                             <IonRow>
                                 <IonCol>
-                                    <Link style={{textDecoration: "none", color: "black"}} to={{
+                                    <Link style={{textDecoration: "none", color: "black", fontSize: "0.8em"}} to={{
                                         pathname: "/userfollowers",
                                         state: {
                                             follower
@@ -36,7 +37,7 @@ const ProfileDetailCard = ({avatar_url, display_name, followers, following}: IUs
                                     </Link>
                                 </IonCol>
                                 <IonCol>
-                                    <Link style={{textDecoration: "none", color: "black"}} to={{
+                                    <Link style={{textDecoration: "none", color: "black", fontSize: "0.8em"}} to={{
                                         pathname: "/userfollowing",
                                         state: {
                                             following: userFollowing
@@ -49,7 +50,7 @@ const ProfileDetailCard = ({avatar_url, display_name, followers, following}: IUs
                             </IonRow>
                         </IonGrid>
                     </IonCol>
-                </IonItem>
+                </IonItemWidth>
             </IonRow>
         </>
     )
@@ -57,6 +58,11 @@ const ProfileDetailCard = ({avatar_url, display_name, followers, following}: IUs
 
 const IonCardTitleStyled = styled(IonCardTitle)`
     font-size: 0.8em;
+    margin-left: 2%;
+`;
+
+const IonItemWidth = styled(IonItem)`
+    width: 100%;
 `;
 
 export default ProfileDetailCard;

@@ -5,7 +5,9 @@ import styled from 'styled-components';
 import configData from "../config.json";
 import ITrip from "../models/ITrip";
 
-const PostInfoCard = ({id, how_long, rating, trip_area, trip_difficulty, trip_type, user, image_filename, trip_description}: ITrip) => {
+const TripsInfoCard = ({id, how_long, rating, trip_area, trip_difficulty, trip_type, user, image_filename, trip_description}: ITrip) => {
+
+    //Inspired by lectures
 
     return (
         <IonCard>
@@ -57,4 +59,4 @@ const IonCardTitleStyled = styled(IonCardTitle)`
     font-size: 1em;
 `;
 
-export default PostInfoCard;
+export default TripsInfoCard;
