@@ -16,8 +16,8 @@ const UserFollowers = (props: any) => {
                 <IonToolbar>
                     <IonButtons>
                         <IonBackButton defaultHref="/home" />
+                        <IonTitle>Følgere</IonTitle>
                     </IonButtons>
-                    <IonTitle>Følgere</IonTitle>
                 </IonToolbar>
             </IonHeader>
             <IonContent>

@@ -223,9 +223,9 @@ const ProfilePage = (props?: any) => {
 
             <IonHeader>
                 <IonToolbar>
-                    <IonTitle>Min profil</IonTitle>
                     <IonButtons>
                         <IonBackButton defaultHref="/home"/>
+                        <IonTitle>Min profil</IonTitle>
                     </IonButtons>
                 </IonToolbar>
             </IonHeader>

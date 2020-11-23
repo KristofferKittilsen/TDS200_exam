@@ -23,14 +23,14 @@ const NavigationFabs = () => {
     return (
         <IonFab vertical="bottom" horizontal="end" slot="fixed">
           <IonFabButton>
-            <IonIcon icon={addCircleOutline} />
+            <IonIconStyled icon={addCircleOutline} />
           </IonFabButton>
           <IonFabList side="top">
             <IonFabButtonStyled onClick={logout}>
-              <IonIcon icon={logOutOutline} />
+              <IonIconStyled icon={logOutOutline} />
             </IonFabButtonStyled>
             <IonFabButtonStyled routerLink="/newTrip">
-              <IonIcon icon={addOutline} />
+              <IonIconStyled icon={addOutline} />
             </IonFabButtonStyled>
           </IonFabList>
         </IonFab>

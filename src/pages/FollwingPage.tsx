@@ -44,9 +44,9 @@ const FollowingPage = () => {
         <IonPage>
             <IonHeader>
                 <IonToolbar>
-                    <IonTitle>Følger</IonTitle>
                     <IonButtons>
                         <IonBackButton defaultHref="/home" />
+                        <IonTitle>Følger</IonTitle>
                     </IonButtons>
                 </IonToolbar>
             </IonHeader>

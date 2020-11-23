@@ -179,8 +179,8 @@ const NewTrip = () => {
                 <IonToolbar>
                     <IonButtons>
                         <IonBackButton defaultHref="/home"/>
+                        <IonTitle>Ny tur</IonTitle>
                     </IonButtons>
-                    <IonTitle>Ny tur</IonTitle>
                 </IonToolbar>
             </IonHeader>
             <IonContent>

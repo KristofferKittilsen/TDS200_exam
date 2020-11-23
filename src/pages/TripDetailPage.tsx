@@ -121,8 +121,9 @@ const TripDetailPage = (props: any) => {
                 <IonToolbar>
                     <IonButtons>
                         <IonBackButton defaultHref="/home"/>
+                        <IonTitle>Detaljer om turen</IonTitle>
                     </IonButtons>
-                    <IonTitle>Detaljer om turen</IonTitle>
+                    
                     {
                        trip.user.id === auth.getClaim("x-hasura-user-id") &&
                          <IonButtons slot="end">
