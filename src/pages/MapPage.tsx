@@ -60,9 +60,9 @@ const MapPage = (props: any) => {
         <IonPage>
             <IonHeader>
                 <IonToolbar>
-                  <IonTitle>Kart</IonTitle>
                   <IonButtons>
                         <IonBackButton defaultHref="/home"/>
+                        <IonTitle>Kart</IonTitle>
                     </IonButtons>
                 </IonToolbar>
             </IonHeader>

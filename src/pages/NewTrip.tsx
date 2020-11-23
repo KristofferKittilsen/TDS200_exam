@@ -80,6 +80,7 @@ const NewTrip = () => {
     const [checked, setChecked] = useState<boolean>(false);
 
     const [markers, setMarkers] = useState<any>([]);
+    const [endMarkerCoords, setEndMarkerCoords] = useState<any>({lat: 0, lng: 0});
 
     const openCamera = async () => {
         await getPhoto ({
@@ -138,8 +139,8 @@ const NewTrip = () => {
                         trip_description: tripDescription,
                         latitude: latitude,
                         longitude: longitude,
-                        endlat: markers[0].lat,
-                        endlng: markers[0].lng
+                        endlat: endMarkerCoords.lat,
+                        endlng: endMarkerCoords.lng
                     }
                 }
             });
@@ -171,6 +172,10 @@ const NewTrip = () => {
 
     if (!isLoaded) {
         return <IonLabel>Laster inn kart</IonLabel>
+    }
+
+    const resetMarker = () => {
+        markers.pop();
     }
     
     return (
@@ -257,26 +262,23 @@ const NewTrip = () => {
                         <IonRow>
                             {
                                 latitude || longitude === null ?
-                                <GoogleMap 
-                                    mapContainerStyle={{width: "100vw", height: "50vh"}} 
-                                    zoom={12} 
-                                    center={coords}
-                                    options={options}
-                                    onClick={(e) => {
-                                        setMarkers((c: any) => [
-                                            ...c, {
-                                                lat: e.latLng.lat(),
-                                                lng: e.latLng.lng(),
-                                                time: new Date()
-                                            }
-                                        ])
-                                    }}
-                                    >
+                                <IonCol>
+                                    <IonLabel>Trykk på kartet for å legge til sluttmarkør.</IonLabel>
+                                    <GoogleMap 
+                                        mapContainerStyle={{width: "100vw", height: "50vh"}} 
+                                        zoom={12} 
+                                        center={coords}
+                                        options={options}
+                                        onClick={ (e) => {
+                                            setEndMarkerCoords({lat: e.latLng.lat(), lng: e.latLng.lng()})
+                                        }}
+                                        >
                                         <Marker label="Start" position={coords}/>
-                                        {markers.map((marker: any) => (
-                                            <Marker key={marker.time.toISOString()} position={{lat: marker.lat, lng: marker.lng}} />
-                                        ))}
-                                </GoogleMap> :
+                                        <Marker label="end" position={endMarkerCoords}/>
+                                        
+                                    </GoogleMap>
+                                </IonCol>
+                                 :
                                 <div></div>
                             }
                         </IonRow>
